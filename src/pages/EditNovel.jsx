@@ -1,57 +1,63 @@
-import './PageStyles.css';
-import axios from 'axios';
 import React, { useState } from 'react';
-import NovelForm from '../components/NovelForm';
 import Header from '../components/Header.jsx';
+import NovelForm from '../components/NovelForm';
 import NovelModal from '../components/NovelModal.jsx';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const AddNovel = () => {
+const EditNovel = () => {
+
+    const location = useLocation();
+    const novel = location.state;
+
     const [isModal, setIsModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [isNavigate, setIsNavigate] = useState(true);
     const navigate = useNavigate();
 
+
     const handleSubmit = async (data) => {
         try {
-            const response = await axios.post(
-                'https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels',
+            console.log(data);
+            const response = await axios.put(`https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels/${novel.id}`, 
                 {
                     novelTitle: data.title,
                     novelAuthor: data.author,
                     novelGenre: data.genre,
                     novelSynopsis: data.synopsis,
                 }
-            );
-            setModalMessage(response.data);
+            )
+            console.log(response.data);
             setIsModal(true);
+            setModalMessage("Edited successfully.");
             setIsNavigate(true);
-        } catch (error) {
+        } catch(error) {
             console.error(error);
-            setModalMessage(error.response?.data || 'Something went wrong!');
             setIsModal(true);
+            setModalMessage("Something went wrong.")
             setIsNavigate(false);
         }
-    };
+    }
 
     const handleClose = () => {
         setIsModal(false);
         if(isNavigate) {
             navigate('/');
         }
-    };
+    }
+
 
     return (
         <div className="w-full min-h-screen flex flex-col">
             <Header />
-            <NovelForm onSubmit={handleSubmit} />
+            <NovelForm novelData={novel} mode='edit' onSubmit={handleSubmit} />
             <NovelModal
                 isOpen={isModal}
                 onClose={handleClose}
                 txtMessage={modalMessage}
             />
         </div>
-    );
-};
+    )
+}
 
-export default AddNovel;
+export default EditNovel

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
+    
     const [data, setData] = useState({
         title: "",
         author:"",
@@ -9,9 +10,16 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
     });
 
     useEffect(() => {
+        console.log(novelData);
         if(mode == "edit" && novelData) {
-            setData(novelData);
+            setData({
+                title: novelData.novelTitle || "",
+                author: novelData.novelAuthor || "",
+                genre: novelData.novelGenre || "",
+                synopsis: novelData.novelSynopsis || ""
+            });
         }
+        console.log(data)
     }, [mode, novelData]);
 
     const handleChange = (e) => {
@@ -24,7 +32,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
         onSubmit(data);
     }
     return (
-        <div className="w-full min-h-screen flex flex-col mt-5 min-w-[500px]">
+        <div className="w-full min-h-screen flex flex-col min-w-[500px]">
             <div className="flex flex-1 items-center justify-center min-w-[500px]">
                 <div className="px-3 bg-[#eff9fb] min-w-[500px] ">
                     <form onSubmit={handleSubmit} 
@@ -34,6 +42,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <input
                                 id="title"
                                 type="text"
+                                value={data.title}
                                 onChange={handleChange}
                                 className="w-[28vw] min-w-[450px] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
@@ -42,6 +51,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <input
                                 id="author"
                                 type="text"
+                                value={data.author}
                                 onChange={handleChange}
                                 className="w-[28vw]  min-w-[450px] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
@@ -50,6 +60,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <input
                                 id="genre"
                                 type="text"
+                                value={data.genre}
                                 onChange={handleChange}
                                 className="w-[28vw]  min-w-[450px] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
@@ -57,6 +68,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <label htmlFor="synopsis" className="pt-2">Synopsis</label>
                             <textarea
                                 id="synopsis"
+                                value={data.synopsis}
                                 onChange={handleChange}
                                 rows="4"
                                 className="w-[28vw]  min-w-[450px] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400 resize-none"
