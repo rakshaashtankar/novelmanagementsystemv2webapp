@@ -14,17 +14,26 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
         }
     }, [mode, novelData]);
 
-    const handleChange = e
+    const handleChange = (e) => {
+        setData({...data, [e.target.id]: e.target.value});
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(data);
+    }
     return (
         <div className="w-full min-h-screen flex flex-col mt-5">
             <div className="flex flex-1 items-center justify-center">
                 <div className="px-3 bg-[#eff9fb]">
-                    <form className='flex flex-col px-5 py-2 justify-center items-center'>
+                    <form onSubmit={handleSubmit} 
+                    className='flex flex-col px-5 py-2 justify-center items-center'>
                         <div className="grid  grid-cols-[auto,1fr]  items-start gap-x-4 gap-y-4 w-full max-w-3xl">
                             <label htmlFor="title" className="pt-2">Title</label>
                             <input
                                 id="title"
                                 type="text"
+                                onChange={handleChange}
                                 className="w-[28vw] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
 
@@ -32,6 +41,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <input
                                 id="author"
                                 type="text"
+                                onChange={handleChange}
                                 className="w-[28vw] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
 
@@ -39,12 +49,14 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                             <input
                                 id="genre"
                                 type="text"
+                                onChange={handleChange}
                                 className="w-[28vw] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400"
                             />
 
                             <label htmlFor="synopsis" className="pt-2">Synopsis</label>
                             <textarea
                                 id="synopsis"
+                                onChange={handleChange}
                                 rows="4"
                                 className="w-[28vw] bg-white border border-gray-400 rounded px-3 py-2 focus:outline-none focus:border-blue-500 hover:border-blue-400 placeholder-gray-400 resize-none"
                             ></textarea>

@@ -7,26 +7,15 @@ import Header from '../components/Header.jsx'
 
 const AddNovel = () => {
 
-    const [data, setData] = useState({
-            title: "",
-            author: "",
-            genre: "",
-            synopsis: ""
-        })
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(data.title);
+    const handleSubmit = (data) => {
+        
     }
 
-    const handleChange = (e) => {
-
-    }
 
     return (
         <div className="w-full min-h-screen flex flex-col">
             <Header/>
-            <NovelForm mode='add'/>
+            <NovelForm onSubmit={handleSubmit}/>
         </div>
         
     )
