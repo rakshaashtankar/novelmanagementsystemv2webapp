@@ -1,13 +1,5 @@
 module.exports = {
-    build: {
-      nixpacksPlan: {
-        phases: {
-          install: {
-            dependsOn: ["setup"],
-            cmds: ["npm install --legacy-peer-deps"]
-          }
-        }
-      }
-    }
-  };
-  
+    root: ".",
+    buildCommand: "npm install --legacy-peer-deps && npm run build",
+    startCommand: "serve -s build"
+};
