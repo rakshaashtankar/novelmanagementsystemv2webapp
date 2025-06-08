@@ -18,7 +18,6 @@ const EditNovel = () => {
 
     const handleSubmit = async (data) => {
         try {
-            console.log(data);
             const response = await axios.put(`https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels/${novel.id}`, 
                 {
                     novelTitle: data.title,

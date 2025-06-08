@@ -10,7 +10,6 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
     });
 
     useEffect(() => {
-        console.log(novelData);
         if(mode == "edit" && novelData) {
             setData({
                 title: novelData.novelTitle || "",
@@ -19,7 +18,6 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                 synopsis: novelData.novelSynopsis || ""
             });
         }
-        console.log(data)
     }, [mode, novelData]);
 
     const handleChange = (e) => {
@@ -28,7 +26,6 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
         onSubmit(data);
     }
     return (
@@ -80,7 +77,7 @@ const NovelForm = ({novelData, mode="add", onSubmit=""}) => {
                                 type="submit"
                                 className="px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                                 >
-                                {mode === 'add' ? 'Add' : 'Save'}
+                                {mode === 'add' ? 'Add Novel' : 'Save Changes'}
                                 </button>
                             </div>
                         </div>
