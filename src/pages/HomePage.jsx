@@ -32,8 +32,7 @@ const HomePage = () => {
 
     const fetchNovels = async () => {
         try {
-            // const response = await axios.get('https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels');
-            const response = await axios.get(`http://localhost:8080/api/novels?page=${page}&rows=${size}`, {
+            const response = await axios.get(`https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels`, {
                 params:{page, size},
             });
             setNovels(response.data.content);
@@ -75,12 +74,8 @@ const HomePage = () => {
     
         const fetchSearchedNovels = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/novels/search", {
-                    params: {
-                        term: modifiedSearchTerm,
-                        page: 0, // use 0 directly
-                        size: size
-                    }
+                const response = await axios.get("https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels/search", {
+                    params: {term: modifiedSearchTerm, page, size}
                 });
                 setSearchedNovels(response.data.content);
                 setTotalPages(response.data.totalPages);
