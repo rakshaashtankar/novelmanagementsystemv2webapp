@@ -24,7 +24,7 @@ const HomePage = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
-    const API_BASE = "http://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels";
+    const API_BASE = "https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels";
 
     // 🔁 Fetch novels
     useEffect(() => {
