@@ -20,36 +20,55 @@ const HomePage = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [searchedNovels, setSearchedNovels] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [size, setsize] = useState(5);
+    const [size, setSize] = useState(5);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
+    const API_BASE = "http://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels";
+
+    // 🔁 Fetch novels
     useEffect(() => {
-        if(!isSearchActive) {
+        if (!isSearchActive) {
             fetchNovels();
         }
-    }, [page, size]);
+    }, [page, size, isSearchActive]);
+
+    // 🔁 Fetch search results when search is active
+    useEffect(() => {
+        if (isSearchActive) {
+            const modifiedSearchTerm = searchTerm.replace(/ /g, '+');
+            const fetchSearchedNovels = async () => {
+                try {
+                    const response = await axios.get(`${API_BASE}/search`, {
+                        params: { term: modifiedSearchTerm, page, size }
+                    });
+                    setSearchedNovels(response.data.content);
+                    setTotalPages(response.data.totalPages);
+                } catch (error) {
+                    console.error('Error fetching search results:', error);
+                }
+            };
+            fetchSearchedNovels();
+        }
+    }, [page, size, isSearchActive]);
 
     const fetchNovels = async () => {
         try {
-            const response = await axios.get(`https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels`, {
-                params:{page, size},
+            const response = await axios.get(API_BASE, {
+                params: { page, size },
             });
             setNovels(response.data.content);
             setTotalPages(response.data.totalPages);
-        } catch(error) {
+        } catch (error) {
             console.error('Error fetching data:', error);
         }
-    }
-
-    const handlePageChange = (newPage) => {
-        setPage(newPage);
     };
 
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels/${id}`) 
-            setNovels(novels.filter(novel => novel.id !== id));
+            const response = await axios.delete(`${API_BASE}/${id}`);
+            const updatedList = (isSearchActive ? searchedNovels : novels).filter(novel => novel.id !== id);
+            isSearchActive ? setSearchedNovels(updatedList) : setNovels(updatedList);
             setModalMessage(response.data);
             setIsModal(true);
         } catch (error) {
@@ -57,38 +76,22 @@ const HomePage = () => {
             setModalMessage(error.response?.data || "Something went wrong");
             setIsModal(true);
         }
-    }
+    };
 
+    const handleClose = () => setIsModal(false);
 
-    const handleClose = () => {
-        setIsModal(false);
-    }
-
-    const hancdleSearchChange = (e) => {
-        e.preventDefault();
+    const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-    }
+    };
 
     const handleSearch = () => {
-        const modifiedSearchTerm = searchTerm.replace(/ /g, '+');
-    
-        const fetchSearchedNovels = async () => {
-            try {
-                const response = await axios.get("https://novelmanagementsystemv2springbootproject-production.up.railway.app/api/novels/search", {
-                    params: {term: modifiedSearchTerm, page, size}
-                });
-                setSearchedNovels(response.data.content);
-                setTotalPages(response.data.totalPages);
-                setPage(0); // then update page state
-                setIsSearchActive(true);
-            } catch (error) {
-                console.error('Error fetching search results:', error);
-            }
-        };
-    
-        fetchSearchedNovels();
+        setPage(0);
+        setIsSearchActive(true);
     };
-    
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
 
     const navigate = useNavigate();
     return (
@@ -104,7 +107,7 @@ const HomePage = () => {
                         type="text"
                         value={searchTerm}
                         placeholder="Search..."
-                        onChange={hancdleSearchChange}
+                        onChange={handleSearchChange}
                         onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                 handleSearch();
@@ -135,7 +138,7 @@ const HomePage = () => {
                         id="size"
                         className="border border-gray-300 rounded-sm px-3 py-2"
                         value={size}
-                        onChange={(e) => setsize(Number(e.target.value))}
+                        onChange={(e) => setSize(Number(e.target.value))}
                         >
                         <option value={5}>5</option>
                         <option value={10}>10</option>
